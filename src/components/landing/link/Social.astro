@@ -1,0 +1,27 @@
+---
+const { domain, username, realurl } = Astro.props
+const href = realurl ? realurl : `https://${domain}/${username}`
+---
+<a {href} target="_blank">
+  <span class="https">https://</span>
+  <span class="domain">{domain}</span>
+  /{username}
+</a>
+
+<style lang="sass">
+a
+  display: flex
+  color: var(--text-alpha)
+  font-weight: 500
+  line-height: 1.4
+  &:hover
+    text-decoration: underline
+  & span.domain
+    color: var(--accent-alpha)
+    font-weight: 600
+
+@media (max-width: 374px)
+  a
+    & span.https
+      display: none
+</style>

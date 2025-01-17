@@ -1,0 +1,149 @@
+---
+import SocialLink from "./link/Social.astro"
+import Button from "./Link.astro"
+---
+<section>
+  <h2>zastihneš mne na</h2>
+  <div>
+    <div id="address-div">
+      <div> 
+        <p class="item">=\</p>
+        <!-- TODO: na dotykových zařízeních bez myši ukázat jiný elemenet, který bude klasika <a> s emailem jako href -->
+        <p id="contact-address"></p>
+      </div>
+      <Button type="button" id="show-address-btn">zobrazit e-mail</Button>
+    </div>
+    <div><p class="item">=|</p><SocialLink domain="github.com" username="ejdrien"/></div>
+    <div><p class="item">=/</p><SocialLink domain="linkedin.com" username="adrianzamecnik" realurl="https://www.linkedin.com/in/adrianzamecnik/"/></div>
+  </div>
+</section>
+
+<script>
+const abc = "abcdefghijklm.nopqrstuvwxyz@"
+
+function rot14(input: string) {
+  let result = ""
+  for (let i = 0; i < input.length; i++) {
+    let char = abc.indexOf(input.charAt(i))
+    let new_char = (char + 1) % 28
+    result += abc[new_char]
+  }
+  return result
+}
+
+let contact_address_el = document.getElementById("contact-address")!
+let address = ".pdu.@m.pdu.@l.yqo@uwzoay"
+for (let i = 0; i < 15 ; i++) {
+  address = rot14(address)
+}
+
+let new_seed = Math.floor(Math.random() * 21 + 1)
+for (let i = 0; i < new_seed; i++) {
+  address = rot14(address)
+}
+contact_address_el.dataset.seed = new_seed.toString()
+contact_address_el.innerText = address
+
+let btn = document.getElementById("show-address-btn")
+btn!.addEventListener("click", () => {
+    btn!.remove()
+    btn = null
+
+    let seed = parseInt(contact_address_el.dataset.seed!)
+    let i = 0
+    let timer = () => setTimeout(() => {
+      contact_address_el.innerText = rot14(contact_address_el.innerText)
+      i++
+      if (i < 28 - seed) timer()
+      else show_hover_on_address(contact_address_el)
+    }, 55)
+    timer()
+  })
+
+function show_hover_on_address(el: HTMLElement) {
+  el.classList.add("revealed")
+  let parent = el.parentElement
+  let hover_box = document.createElement("div")
+  hover_box.setAttribute("id", "hover_box")
+  hover_box.innerText = "zkopírovat"
+  hover_box.classList.add("hide")
+  parent!.insertAdjacentElement("beforebegin", hover_box)
+  el.onmousemove = (e: MouseEvent) => {
+    let hover_box_height = hover_box.clientHeight
+    hover_box.style.top = `${e.layerY - hover_box_height}px`
+    hover_box.style.left = `${e.layerX}px`
+  }
+  el.onmouseover = () => hover_box.classList.remove("hide")
+  el.onmouseout = () => hover_box.classList.add("hide")
+  function handle_copy() {
+    navigator.clipboard.writeText(el.innerText)
+      .then(() => {
+        el.innerText = "e-mailová adresa byla zkopírována."
+        el.removeEventListener("click", handle_copy)
+        el.onmousemove = null
+        el.onmouseover = null
+        el.dispatchEvent(new MouseEvent("mouseout"))
+        // @ts-ignore
+        hover_box = null
+        el.onmouseout = null
+        el.classList.remove("revealed")
+      })
+  }
+  el.addEventListener("click", handle_copy)
+}
+
+</script>
+
+<style lang="sass">
+section
+  display: flex
+  flex-flow: column
+  gap: 1rem
+  & h2::before
+    content: "\\ "
+    color: var(--accent-alpha)
+  & h2::after
+    content: " /"
+    color: var(--accent-alpha)
+  & > div
+    position: relative
+    display: flex
+    flex-flow: column
+    gap: .05rem
+    & p.item
+      display: inline
+      color: var(--accent-alpha)
+      font-weight: 600
+      font-variation-settings: "opsz" 8
+    & p#contact-address
+      &.revealed
+        user-select: none
+        cursor: pointer
+    & :global(div#hover_box)
+      font-family: Kode
+      background: var(--text-beta)
+      line-height: 1.4
+      color: var(--bg-alpha)
+      font-size: .8rem
+      position: absolute
+      user-select: none
+      pointer-events: none
+      &.hide
+        display: none
+    & div
+      display: flex
+      align-items: center
+      // flex-wrap: wrap
+      gap: .35rem
+      flex-wrap: nowrap
+      & :global(button)
+        margin-left: .5rem
+
+@media (max-width: 615px)
+  div#address-div
+    flex-flow: column
+    align-items: flex-start
+    gap: 0
+    & :global(button)
+      margin: .45rem 1.3rem
+</style>

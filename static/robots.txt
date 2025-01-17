@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://adrianzamecnik.com/sitemap-index.xml

@@ -1,0 +1,14 @@
+{
+  "lang": "cs",
+  "short_name": "A. Zámečník",
+  "name": "Adrián Zámečník",
+  "description": "Studuju matematiku a programuju. Moc toho o světě ještě nevím, ale rád se o něm učím a zkouším nové věci. Tohle je moje místo na internetu a chci si to tu udělat hezký :)",
+  "icons": [
+    { "src": "/favicon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/favicon-512.png", "type": "image/png", "sizes": "512x512" }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#0a0a0a",
+  "background_color": "#0a0a0a"
+}

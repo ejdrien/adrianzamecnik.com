@@ -1,0 +1,86 @@
+@font-face
+  font-family: SourceSerif
+  font-weight: 200 900
+  font-style: normal
+  font-display: swap
+  src: url("/fonts/Source.woff2") format("woff2")
+
+@font-face
+  font-family: Kode
+  font-weight: 400 800
+  font-style: normal
+  font-display: swap
+  src: url("/fonts/Kode.woff2") format("woff2")
+
+html
+  font-family: SourceSerif, sans-serif
+  font-variation-settings: "opsz" 25
+  box-sizing: border-box
+  background: var(--bg-alpha)
+  color: var(--text-alpha)
+  width: 100%
+  height: 100%
+  // Removes font scaling when switching to landscape view (touch devices)
+  -webkit-text-size-adjust: 100%
+
+body
+  display: flex
+  flex-flow: column
+  max-width: 100%
+  min-height: 100%
+  overflow-wrap: break-word
+
+*, *::before, *::after
+  box-sizing: inherit
+
+*
+  outline: 0
+  // Prevents hightlight on touch (touch devices)
+  -webkit-tap-highlight-color: transparent
+  // Removes double-tap zoom (touch devices)
+  touch-action: manipulation
+
+body, h1, h2, h3, h4, h5, h6, p
+  margin: 0
+
+h1, h2, h3, h4, h5, h6
+  color: var(--text-beta)
+
+a
+  text-decoration: none
+  &, &:visited
+    color: inherit
+
+a, img
+  user-select: none
+
+button
+  font-family: inherit
+  padding: 0
+  margin: 0
+  border: none
+  border-radius: 0
+  background: none
+  color: var(--text-alpha)
+  cursor: pointer
+  user-select: none
+  font-size: inherit
+
+// input
+//   filter: none
+//   appearance: none
+//   border: none
+//   border-radius: 0
+
+::selection
+  background: var(--text-beta)
+  color: var(--bg-alpha)
+
+html
+  --bg-alpha: rgb(10, 10, 10)
+  --bg-beta: rgb(28, 28, 28)
+  --bg-gamma: rgb(47, 47, 47)
+  --text-alpha: rgba(255, 255, 255, .5)
+  --text-beta: rgba(255, 255, 255, .87)
+  --border-alpha: 2px solid rgba(255, 255, 255, .15)
+  --accent-alpha: #f69

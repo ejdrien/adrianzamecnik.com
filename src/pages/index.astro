@@ -1,0 +1,46 @@
+---
+import MyName from "../components/svg/MyName.astro"
+import DefaultLayout from "../layouts/Default.astro"
+// import Blog from "../components/landing/Blog.astro"
+// import Projects from "../components/landing/Projects.astro"
+// import Education from "../components/landing/Education.astro"
+import Socials from "../components/landing/Socials.astro"
+---
+
+<DefaultLayout>
+  <main>
+    <section>
+      <MyName/>
+      <p>studuju matematiku a programuju.</p>
+    </section>
+    <!-- <Blog/> -->
+    <!-- <Projects/> -->
+    <!-- <Education/> -->
+    <Socials/>
+  </main>
+</DefaultLayout>
+
+
+<style lang="sass">
+main
+  flex: 1
+  display: flex
+  flex-flow: column
+  // align-items: center
+  // justify-content: center
+  padding: 4rem
+  gap: 2.4rem
+  & section
+    display: flex
+    flex-flow: column
+    gap: 2.6rem
+    & p
+      font-family: Kode
+      text-transform: uppercase
+      color: var(--text-beta)
+      font-weight: bold
+
+@media (max-width: 500px)
+  main
+    padding: 9.5vw
+</style>

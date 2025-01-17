@@ -1,0 +1,37 @@
+---
+import "../../styles/global.sass"
+
+let canonicalURL = new URL(Astro.url.pathname, Astro.site).href
+if (canonicalURL[canonicalURL.length - 1] == "/") canonicalURL = canonicalURL.slice(0, -1)
+
+// TODO: title and description based on current page
+let title = "Adrián Zámečník"
+let description = "Studuju matematiku a programuju. Moc toho o světě ještě nevím, ale rád se o něm učím a zkouším nové věci. Tohle je moje místo na internetu a chci si to tu udělat hezký :)"
+
+// TODO(note): open graph offers article:author yada-yada for blog
+---
+<head>
+  <meta charset="utf-8">
+  <title>{title}</title>
+  <meta name="author" content="Adrián Zámečník">
+  <link rel="canonical" href={canonicalURL}>
+  {/* TODO: description needs to be synced with manifest.json */}
+  <meta name="description" content={description}>
+  {/* TODO: sync theme color */}
+  <meta name="theme-color" content="#ff6699" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#ff6699" media="(prefers-color-scheme: light)">
+  {/* TODO: is vewport-fit=cover okay? */}
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover,minimal-ui">
+  <meta property="og:url" content={canonicalURL}>
+  <meta property="og:title" content={title}>
+  <meta property="og:type" content="website">
+  <meta property="og:description" content={description}>
+  {/* TODO: after i18n -> proper og locales + locael:alternate */}
+  <!-- <meta property="og:locale" content="cs-CZ"> -->
+  {/* TODO: figure out og:images */}
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="sitemap" href="/sitemap-index.xml">
+</head>

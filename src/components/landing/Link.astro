@@ -1,0 +1,112 @@
+---
+interface Props {
+  id?: string,
+  href?: string,
+  target?: string,
+  type: "button" | "link",
+}
+const { id, href, type, target } = Astro.props
+---
+{type == "link" ? (
+  <a {id} {href} target={target ? target : "_blank"}>
+    <span></span>
+    <span></span>
+    <slot/>
+    <span></span>
+    <span></span>
+  </a>)
+  : (
+  <button {id}>
+    <span></span>
+    <span></span>
+    <slot/>
+    <span></span>
+    <span></span>
+  </button>
+)}
+
+<style lang="sass">
+a, button
+  font-family: Kode
+  letter-spacing: -.065rem
+  font-size: 1rem
+  display: flex
+  align-items: center
+  position: relative
+  text-decoration: none
+  color: var(--text-alpha)
+  line-height: .9
+  transition: .45s ease color
+  --size: .125rem
+  --width: .175rem
+  padding: var(--size) calc(.3rem + var(--width))
+  & span
+    position: absolute
+    width: var(--width)
+    height: var(--size)
+    background: var(--text-alpha)
+    &:first-of-type
+      top: 0
+      left: var(--width)
+    &:nth-child(2)
+      top: calc(100% - var(--size))
+      left: var(--width)
+    &:nth-last-of-type(2)
+      top: calc(100% - var(--size))
+      right: var(--width)
+    &:last-of-type
+      top: 0
+      right: var(--width)
+    &:first-of-type, &:last-of-type
+      transition: ease-in-out
+      transition-property: transform, opacity
+      transition-delay: .45s, .4s
+      transition-duration: .1s, 0s
+    &:nth-child(2), &:nth-last-child(2)
+      transition: .3s ease
+      transition-property: width, left, right
+  &::before, &::after
+    content: ""
+    width: var(--size)
+    height: 100%
+    background: var(--text-alpha)
+    position: absolute
+    transition: .3s ease
+    transition-property: height, top, left, right
+    transition-delay: .15s, .15s, 0s, 0s
+  &::before
+    top: 0
+    left: calc(var(--width) - var(--size))
+  &::after
+    top: 0
+    right: calc(var(--width) - var(--size))
+
+    
+a:hover, button:hover
+  color: var(--text-beta)
+  & span
+    &:first-of-type
+      transform: translateX(calc(-1 * var(--size)))
+    &:last-of-type
+      transform: translateX(var(--size))
+    &:first-of-type, &:last-of-type
+      opacity: 0
+      transition-property: transform, opacity
+      transition-delay: 0s, .1s
+    &:nth-child(2), &:nth-last-child(2)
+      width: calc(100% / 2 - .3rem - var(--width))
+      transition-duration: .3s
+      transition-delay: .15s, .4s, .4s
+    &:nth-child(2)
+      left: calc(.3rem + var(--width))
+    &:nth-last-child(2)
+      right: calc(.3rem + var(--width))
+  &::before
+    left: calc(.3rem + var(--width) - var(--size))
+  &::after
+    right: calc(.3rem + var(--width) - var(--size))
+  &::before, &::after
+    height: var(--size)
+    top: calc(100% - var(--size))
+    transition-delay: .1s, .1s, .4s, .4s
+</style>
