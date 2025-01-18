@@ -31,6 +31,8 @@ function rot14(input: string) {
   return result
 }
 
+// we start with the address encrypted so that it's not explicitly written out anywhere
+// and then we rehash it so that each page refresh is fun
 let contact_address_el = document.getElementById("contact-address")!
 let address = ".pdu.@m.pdu.@l.yqo@uwzoay"
 for (let i = 0; i < 15 ; i++) {
@@ -44,54 +46,75 @@ for (let i = 0; i < new_seed; i++) {
 contact_address_el.dataset.seed = new_seed.toString()
 contact_address_el.innerText = address
 
+let eventissimo: MouseEvent
+const track_mouse_for_initial_hover_box_pos = (e: MouseEvent) => eventissimo = e
+
 let btn = document.getElementById("show-address-btn")
 btn!.addEventListener("click", () => {
-    btn!.remove()
-    btn = null
+  btn!.remove()
+  btn = null
 
-    let seed = parseInt(contact_address_el.dataset.seed!)
-    let i = 0
-    let timer = () => setTimeout(() => {
-      contact_address_el.innerText = rot14(contact_address_el.innerText)
-      i++
-      if (i < 28 - seed) timer()
-      else show_hover_on_address(contact_address_el)
-    }, 55)
-    timer()
-  })
+  document.addEventListener("mousemove", track_mouse_for_initial_hover_box_pos)
 
-function show_hover_on_address(el: HTMLElement) {
-  el.classList.add("revealed")
-  let parent = el.parentElement
+  let seed = parseInt(contact_address_el.dataset.seed!)
+  let i = 0
+  let timer = () => setTimeout(() => {
+    contact_address_el.innerText = rot14(contact_address_el.innerText)
+    i++
+    if (i < 28 - seed) timer()
+    else show_hover_box_on_address_hover()
+  }, 55)
+  timer()
+})
+
+function show_hover_box_on_address_hover() {
+  document.removeEventListener("mousemove", track_mouse_for_initial_hover_box_pos)
+
+  let el = contact_address_el
+  contact_address_el.classList.add("revealed")
+  let parent = contact_address_el.parentElement
   let hover_box = document.createElement("div")
   hover_box.setAttribute("id", "hover_box")
   hover_box.innerText = "zkopírovat"
   hover_box.classList.add("hide")
+
   parent!.insertAdjacentElement("beforebegin", hover_box)
-  el.onmousemove = (e: MouseEvent) => {
-    let hover_box_height = hover_box.clientHeight
-    hover_box.style.top = `${e.layerY - hover_box_height}px`
+
+  try {
+    let some_el = document.elementFromPoint(eventissimo.x, eventissimo.y)!
+    let id = some_el.id
+    if (id == "contact-address") {
+      hover_box.classList.remove("hide")
+      hover_box.style.top = `${eventissimo.layerY - hover_box.clientHeight}px`
+      hover_box.style.left = `${eventissimo.layerX}px`
+    }
+  } catch {}
+
+
+  contact_address_el.onmousemove = (e: MouseEvent) => {
+    hover_box.style.top = `${e.layerY - hover_box.clientHeight}px`
     hover_box.style.left = `${e.layerX}px`
   }
-  el.onmouseover = () => hover_box.classList.remove("hide")
-  el.onmouseout = () => hover_box.classList.add("hide")
-  function handle_copy() {
-    navigator.clipboard.writeText(el.innerText)
+  contact_address_el.onmouseover = () => hover_box.classList.remove("hide")
+  contact_address_el.onmouseout = () => hover_box.classList.add("hide")
+
+  function handle_address_copy() {
+    navigator.clipboard.writeText(contact_address_el.innerText)
       .then(() => {
-        el.innerText = "e-mailová adresa byla zkopírována."
-        el.removeEventListener("click", handle_copy)
-        el.onmousemove = null
-        el.onmouseover = null
-        el.dispatchEvent(new MouseEvent("mouseout"))
+        contact_address_el.innerText = "e-mailová adresa byla zkopírována."
+        contact_address_el.removeEventListener("click", handle_address_copy)
+        contact_address_el.dispatchEvent(new MouseEvent("mouseout"))
+        contact_address_el.onmousemove = null
+        contact_address_el.onmouseover = null
+        contact_address_el.onmouseout = null
         // @ts-ignore
         hover_box = null
-        el.onmouseout = null
-        el.classList.remove("revealed")
+        contact_address_el.classList.remove("revealed")
       })
   }
-  el.addEventListener("click", handle_copy)
-}
 
+  el.addEventListener("click", handle_address_copy)
+}
 </script>
 
 <style lang="sass">
